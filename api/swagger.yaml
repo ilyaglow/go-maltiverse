@@ -1,0 +1,613 @@
+---
+swagger: "2.0"
+info:
+  description: "Maltiverse API"
+  version: "1.0.0"
+  title: "Maltiverse API"
+  contact:
+    email: "root@maltiverse.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.maltiverse.com"
+basePath: "/"
+tags:
+- name: "ipv4"
+  description: "IPv4 address IoC related methods"
+- name: "hostname"
+  description: "Hostname IoC related methods"
+- name: "url"
+  description: "Url IOC related methods"
+- name: "samlpe"
+  description: "Sample IOC related methods"
+schemes:
+- "https"
+paths:
+  /ip/{ipv4}:
+    get:
+      tags:
+      - "ipv4"
+      summary: "retrieves an IP indicator"
+      description: "Retrieves the specified ip if exists\n"
+      operationId: "getIP"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ipv4"
+        in: "path"
+        description: "ID of IPv4 address to return"
+        required: true
+        type: "string"
+        format: "ipv4"
+        x-exportParamName: "Ipv4"
+      responses:
+        200:
+          description: "Ip found"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/IpItem"
+        400:
+          description: "Bad request. Not a valid IP address"
+        404:
+          description: "Not found"
+    put:
+      tags:
+      - "ipv4"
+      summary: "adds an ipv4 item"
+      description: "Adds an ipv4 to the system."
+      operationId: "addIpV4"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ipv4"
+        in: "path"
+        description: "ID of IPv4 address to return"
+        required: true
+        type: "string"
+        format: "ipv4"
+        x-exportParamName: "Ipv4"
+      - in: "body"
+        name: "body"
+        description: "ipv4 object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/IpItem"
+        x-exportParamName: "Body"
+      responses:
+        200:
+          description: "IP created"
+        201:
+          description: "IP updated"
+        400:
+          description: "Bad request. Not a valid IP address"
+        500:
+          description: "Internal Server Error"
+    delete:
+      tags:
+      - "ipv4"
+      summary: "Deletes an IP indicator. Only an admin can delete indicators."
+      description: "Deletes a specified IP address indicator\n"
+      operationId: "deleteIP"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ipv4"
+        in: "path"
+        description: "ID of IPv4 address to return"
+        required: true
+        type: "string"
+        format: "ipv4"
+        x-exportParamName: "Ipv4"
+      responses:
+        200:
+          description: "IP deleted"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/IpItem"
+        400:
+          description: "Bad request. Not a valid IP address"
+        404:
+          description: "Not found"
+  /hostname/{hostname}:
+    get:
+      tags:
+      - "hostname"
+      summary: "retrieves an Honstame indicator"
+      description: "Retrieves the specified hostname if exists\n"
+      operationId: "getHostname"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hostname"
+        in: "path"
+        description: "ID of Hostname to return"
+        required: true
+        type: "string"
+        format: "hostname"
+        x-exportParamName: "Hostname"
+      responses:
+        200:
+          description: "Hostname found"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/HostnameItem"
+        400:
+          description: "Bad request. Not a valid hostname"
+        404:
+          description: "Not found"
+    put:
+      tags:
+      - "hostname"
+      summary: "adds a hostname item"
+      description: "Adds a hostname to the system"
+      operationId: "addHostname"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hostname"
+        in: "path"
+        description: "ID of hotname address to return"
+        required: true
+        type: "string"
+        format: "hostname"
+        x-exportParamName: "Hostname"
+      - in: "body"
+        name: "body"
+        description: "hostname object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/HostnameItem"
+        x-exportParamName: "Body"
+      responses:
+        200:
+          description: "hostname created"
+        201:
+          description: "hostname updated"
+        400:
+          description: "Bad request. Not a valid hostname"
+        500:
+          description: "Internal Server Error"
+    delete:
+      tags:
+      - "hostname"
+      summary: "Deletes a hostname indicator. Only an admin can delete indicators."
+      description: "Deletes a specified Hostname indicator\n"
+      operationId: "deleteHostname"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hostname"
+        in: "path"
+        description: "ID of hostname to return"
+        required: true
+        type: "string"
+        format: "hostname"
+        x-exportParamName: "Hostname"
+      responses:
+        200:
+          description: "Hostname deleted"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/HostnameItem"
+        400:
+          description: "Bad request. Not a valid Hostname"
+        404:
+          description: "Not found"
+  /url/{urlchecksum}:
+    get:
+      tags:
+      - "url"
+      summary: "retrieves an URL indicator"
+      description: "Retrieves the specified url if exists fetched by its sha256 integrity\
+        \ checksum\n"
+      operationId: "getUrl"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "urlchecksum"
+        in: "path"
+        description: "ID of URL to return. Must be calculated by the sha256 hash of\
+          \ the effective URL"
+        required: true
+        type: "string"
+        maxLength: 64
+        minLength: 64
+        x-exportParamName: "Urlchecksum"
+      responses:
+        200:
+          description: "URL found"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UrlItem"
+        400:
+          description: "Bad request. Not a valid url"
+        404:
+          description: "Not found"
+    put:
+      tags:
+      - "url"
+      summary: "adds a url item"
+      description: "Adds a url to the system"
+      operationId: "addURL"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "urlchecksum"
+        in: "path"
+        description: "ID of URL to return. Must be calculated by the sha256 hash of\
+          \ the effective URL."
+        required: true
+        type: "string"
+        maxLength: 64
+        minLength: 64
+        x-exportParamName: "Urlchecksum"
+      - in: "body"
+        name: "body"
+        description: "URL object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/UrlItem"
+        x-exportParamName: "Body"
+      responses:
+        200:
+          description: "Url created"
+        201:
+          description: "Url updated"
+        400:
+          description: "Bad request. Not a valid Url"
+        500:
+          description: "Internal Server Error"
+    delete:
+      tags:
+      - "url"
+      summary: "Deletes a url indicator. Only an admin can delete indicators."
+      description: "Deletes a specified Url indicator\n"
+      operationId: "deleteUrl"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "urlchecksum"
+        in: "path"
+        description: "ID of URL to delete. Must be calculated by the sha256 hash of\
+          \ the effective URL."
+        required: true
+        type: "string"
+        maxLength: 64
+        minLength: 64
+        x-exportParamName: "Urlchecksum"
+      responses:
+        200:
+          description: "Url deleted"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UrlItem"
+        400:
+          description: "Bad request. Not a valid Url"
+        404:
+          description: "Not found"
+definitions:
+  IpItem:
+    type: "object"
+    required:
+    - "classification"
+    - "ip_addr"
+    - "type"
+    properties:
+      ip_addr:
+        type: "string"
+        format: "ipv4"
+        example: "1.1.1.1"
+      type:
+        type: "string"
+        enum:
+        - "ip"
+      classification:
+        type: "string"
+        enum:
+        - "malicious"
+        - "suspicious"
+        - "neutral"
+        - "whitelisted"
+      tag:
+        type: "array"
+        example:
+        - "c&c"
+        - "banker"
+        - "phishing"
+        - "compromised"
+        uniqueItems: true
+        items:
+          type: "string"
+      blacklist:
+        type: "array"
+        items:
+          $ref: "#/definitions/blItem"
+      creation_time:
+        type: "string"
+        format: "date"
+        description: "The the date when the indicator is created. If no specified\
+          \ takes the current date value\n"
+      modification_time:
+        type: "string"
+        format: "date"
+        description: "The the date when the indicator got its last modification. If\
+          \ no specified takes the current date value\n"
+      country_code:
+        type: "string"
+        description: "Country code related to the IP address.\n"
+        minLength: 2
+        maxLength: 2
+      city:
+        type: "string"
+        description: "City related to the IP address.\n"
+      state:
+        type: "string"
+        description: "State related to the IP address.\n"
+      location:
+        $ref: "#/definitions/locationItem"
+      email:
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "string"
+          format: "email"
+          example: ""
+      address:
+        type: "string"
+        description: "Address related to the IP address.\n"
+      as_name:
+        type: "string"
+        description: "Autonomous system related to the IP address.\n"
+      asn_cidr:
+        type: "string"
+        description: "Autonomous system CIDR related to the IP address.      \n"
+      asn_country_code:
+        type: "string"
+        description: "Country Code related to the IP address.   \n"
+      asn_date:
+        type: "string"
+        description: "ASN date related to the IP address.   \n"
+      asn_registry:
+        type: "string"
+        description: "ASN registry related to the IP address.   \n"
+      cidr:
+        type: "string"
+        description: "CIDR related to the IP address. \n"
+      registrant_name:
+        type: "string"
+        description: "Registrant name related to the IP address.       \n"
+      postal_code:
+        type: "string"
+        description: "Postal code to the IP address. \n"
+      last_updated:
+        type: "string"
+        format: "date"
+        description: "Last time the whois reocord related to the IP address was updated.\
+          \ \n"
+    example:
+      creation_time: "2000-01-23"
+      last_updated: "2000-01-23"
+      address: "address"
+      city: "city"
+      blacklist:
+      - first_seen: "2000-01-23"
+        last_seen: "2000-01-23"
+        description: "Emotet"
+        source: "Maltiverse Research Team"
+      - first_seen: "2000-01-23"
+        last_seen: "2000-01-23"
+        description: "Emotet"
+        source: "Maltiverse Research Team"
+      asn_cidr: "asn_cidr"
+      type: "ip"
+      classification: "malicious"
+      asn_date: "asn_date"
+      asn_country_code: "asn_country_code"
+      country_code: "country_code"
+      registrant_name: "registrant_name"
+      location:
+        lon: -23.1212
+        lat: 11.231
+      cidr: "cidr"
+      tag:
+      - "c&c"
+      - "banker"
+      - "phishing"
+      - "compromised"
+      state: "state"
+      asn_registry: "asn_registry"
+      ip_addr: "1.1.1.1"
+      postal_code: "postal_code"
+      modification_time: "2000-01-23"
+      email:
+      - ""
+      - ""
+      as_name: "as_name"
+  HostnameItem:
+    type: "object"
+    required:
+    - "classification"
+    - "hostname"
+    - "type"
+    properties:
+      hostname:
+        type: "string"
+        format: "hostname"
+        example: "paypal.com-information-update-activity-account.gq"
+      type:
+        type: "string"
+        enum:
+        - "hostname"
+      classification:
+        type: "string"
+        enum:
+        - "malicious"
+        - "suspicious"
+        - "neutral"
+        - "whitelisted"
+      tag:
+        type: "array"
+        example:
+        - "c&c"
+        - "banker"
+        - "phishing"
+        - "compromised"
+        uniqueItems: true
+        items:
+          type: "string"
+      blacklist:
+        type: "array"
+        items:
+          $ref: "#/definitions/blItem"
+      creation_time:
+        type: "string"
+        format: "date"
+        description: "The the date when the indicator is created. If no specified\
+          \ takes the current date value\n"
+      modification_time:
+        type: "string"
+        format: "date"
+        description: "The the date when the indicator got its last modification. If\
+          \ no specified takes the current date value\n"
+    example:
+      creation_time: "2000-01-23"
+      hostname: "paypal.com-information-update-activity-account.gq"
+      blacklist:
+      - first_seen: "2000-01-23"
+        last_seen: "2000-01-23"
+        description: "Emotet"
+        source: "Maltiverse Research Team"
+      - first_seen: "2000-01-23"
+        last_seen: "2000-01-23"
+        description: "Emotet"
+        source: "Maltiverse Research Team"
+      tag:
+      - "c&c"
+      - "banker"
+      - "phishing"
+      - "compromised"
+      type: "hostname"
+      classification: "malicious"
+      modification_time: "2000-01-23"
+  UrlItem:
+    type: "object"
+    required:
+    - "classification"
+    - "type"
+    - "url"
+    properties:
+      url:
+        type: "string"
+        format: "uri"
+        example: "http://assocolours.com/mu/i/LoginVerification.php"
+      type:
+        type: "string"
+        enum:
+        - "url"
+      classification:
+        type: "string"
+        enum:
+        - "malicious"
+        - "suspicious"
+        - "neutral"
+        - "whitelisted"
+      tag:
+        type: "array"
+        example:
+        - "c&c"
+        - "banker"
+        - "phishing"
+        - "compromised"
+        uniqueItems: true
+        items:
+          type: "string"
+      blacklist:
+        type: "array"
+        items:
+          $ref: "#/definitions/blItem"
+      creation_time:
+        type: "string"
+        format: "date"
+        description: "The the date when the indicator is created. If no specified\
+          \ takes the current date value\n"
+      modification_time:
+        type: "string"
+        format: "date"
+        description: "The the date when the indicator got its last modification. If\
+          \ no specified takes the current date value\n"
+    example:
+      creation_time: "2000-01-23"
+      blacklist:
+      - first_seen: "2000-01-23"
+        last_seen: "2000-01-23"
+        description: "Emotet"
+        source: "Maltiverse Research Team"
+      - first_seen: "2000-01-23"
+        last_seen: "2000-01-23"
+        description: "Emotet"
+        source: "Maltiverse Research Team"
+      tag:
+      - "c&c"
+      - "banker"
+      - "phishing"
+      - "compromised"
+      type: "url"
+      classification: "malicious"
+      modification_time: "2000-01-23"
+      url: "http://assocolours.com/mu/i/LoginVerification.php"
+  blItem:
+    type: "object"
+    required:
+    - "description"
+    - "source"
+    properties:
+      description:
+        type: "string"
+        example: "Emotet"
+      source:
+        type: "string"
+        example: "Maltiverse Research Team"
+      first_seen:
+        type: "string"
+        format: "date"
+        description: "First date when the blacklist blame was noticed. If no specified\
+          \ takes the current date value. This date can't point to the future and\
+          \ must be less or equal than last_seen\n"
+      last_seen:
+        type: "string"
+        format: "date"
+        description: "Last date when the blacklist blame was noticed. If no specified\
+          \ takes the current date value. This date can't point to the future and\
+          \ must be greater or equal than first_seen\n"
+    example:
+      first_seen: "2000-01-23"
+      last_seen: "2000-01-23"
+      description: "Emotet"
+      source: "Maltiverse Research Team"
+  locationItem:
+    type: "object"
+    required:
+    - "lat"
+    - "lon"
+    properties:
+      lat:
+        type: "number"
+        example: 11.231
+      lon:
+        type: "number"
+        example: -23.1212
+    example:
+      lon: -23.1212
+      lat: 11.231
