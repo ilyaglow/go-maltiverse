@@ -45,7 +45,7 @@ Class | Method | HTTP request | Description
 
  - [BlItem](docs/BlItem.md)
  - [HostnameItem](docs/HostnameItem.md)
- - [IpItem](docs/IpItem.md)
+ - [IPItem](docs/IPItem.md)
  - [LocationItem](docs/LocationItem.md)
  - [URLItem](docs/URLItem.md)
 
